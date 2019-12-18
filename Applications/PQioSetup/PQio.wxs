@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="PQds" Language="1033" Version="!(bind.FileVersion.PQds.exe)" Manufacturer="Grid Protection Alliance" UpgradeCode="7a9ecf0a-e74e-4d66-b272-cc3a4749a4ea">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate  EmbedCab="yes" />
+
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED"/>
+    <Condition Message='This setup requires Microsoft .NET Framework 4.6 or greater - this will need to be installed before installation can continue.'>
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED]]>
+    </Condition>
+
+		<Feature Id="ProductFeature" Title="PQds" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+    <UI>
+      <!-- User Interface -->
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="CompanyInfoDialog" Order="3">NOT Installed AND NOT REMOVE</Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Property="COMPANYNAME" Value="[DEFAULTCOMPANYNAME]" Order="1">NOT COMPANYNAME</Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Property="COMPANYEMAIL" Value="[DEFAULTCOMPANYEMAIL]" Order="2">NOT COMPANYEMAIL</Publish>
+      
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="CompanyInfoDialog">NOT Installed AND NOT REMOVE</Publish>      
+    </UI>
+
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)Documentation\License_PQDS.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.SolutionDir)Applications\PQioSetup\PQDs_Header.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.SolutionDir)Applications\PQioSetup\PQDs_Dialog.png" />
+    
+    
+    <Property Id="DEFAULTCOMPANYNAME" Value="My Company" />
+    <Property Id="DEFAULTCOMPANYEMAIL" Value="myemail@mycompany.com" />
+    <Property Id="COMPANYNAME" Secure="yes" />
+    <Property Id="COMPANYEMAIL" Secure="yes" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    
+    <Property Id="SERVICENAME" Value="$(var.PQds.TargetName)" />
+  
+    <Icon Id="icon.ico" SourceFile="$(var.PQds.TargetPath)"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    
+    
+    <!-- Custom Actions -->
+    <Binary Id="InstallerActions" SourceFile="$(var.SolutionDir)\Dependencies\gsf\GSF.InstallerActions.CA.dll" />
+    
+    
+    <CustomAction Id="UpdateDB.SetProperty" Property="UpdateDB" Value="ProcessStartInfo=FileName=[#SetupTool.exe];;Arguments='[COMPANYNAME]' '[COMPANYEMAIL]';;WorkingDirectory=[INSTALLFOLDER];SERVICENAME=[SERVICENAME]" />
+    <CustomAction Id="UpdateDB" BinaryKey="InstallerActions" DllEntry="StartProcessAction" Execute="deferred" Impersonate="no" />
+
+    <InstallExecuteSequence>
+      <Custom Action="UpdateDB.SetProperty" After="InstallFiles">NOT Installed AND NOT REMOVE</Custom>
+      <Custom Action="UpdateDB" After="UpdateDB.SetProperty">NOT Installed AND NOT REMOVE</Custom>
+    </InstallExecuteSequence>
+      
+  </Product>
+  <Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <?if $(var.Platform) = x64 ?>
+        <Directory Id="ProgramFiles64Folder">
+          <Directory Id="INSTALLFOLDER" Name="PQds">
+              <Directory Id="DocFolder" Name="Documentation"/>
+          </Directory>
+        </Directory>
+      <?else ?>
+        <Directory Id="ProgramFilesFolder">
+          <Directory Id="INSTALLFOLDER" Name="PQds">
+            <Directory Id="DocFolder" Name="Documentation"/>
+          </Directory>
+        </Directory>
+      <?endif ?>
+    <Directory Id="ProgramMenuFolder">
+      <Directory Id="StartMenuFolderName" Name="PQds" />
+      <Directory Id="DesktopFolder" />
+    </Directory>
+    </Directory>
+    
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="PQds">
+        <File Id="PQds.exe" Name="$(var.PQds.TargetFileName)" Source="$(var.PQds.TargetPath)" />
+			</Component>
+      <Component Id="FileParser">
+        <File Id="FileParser.dll" Name="$(var.FileParser.TargetFileName)" Source="$(var.FileParser.TargetPath)" />
+      </Component>
+      <Component Id="PQds.Model">
+        <File Id="PQds.Model.dll" Name="$(var.PQds.Model.TargetFileName)" Source="$(var.PQds.Model.TargetPath)" />
+      </Component>
+      <ComponentGroupRef Id="GSFLibraries" />
+      <ComponentRef Id="Ionic.Zlib"/>
+      <ComponentRef Id="SQLLiteDB"/>
+      <ComponentRef Id="Newtonsoft.Json"/>
+      <ComponentGroupRef Id="SQLLITE"/>
+      <ComponentRef Id="SetupTool"/>
+      <ComponentGroupRef Id="AppConfig" />
+      <ComponentGroupRef Id="Documentation"/>
+
+      <ComponentGroupRef Id="ApplicationShortcut"/>
+		</ComponentGroup>
+
+    <ComponentGroup Id="GSFLibraries" Directory="INSTALLFOLDER">
+      <Component Id="GSF.Core">
+        <File Id="GSF.Core.dll" Name="GSF.Core.dll" Source="$(var.SolutionDir)Dependencies\gsf\GSF.Core.dll" />
+      </Component>
+      <Component Id="GSF.PQDIF">
+        <File Id="GSF.PQDIF.dll" Name="GSF.PQDIF.dll" Source="$(var.SolutionDir)Dependencies\gsf\GSF.PQDIF.dll" />
+      </Component>
+      <Component Id="TagDefinitions">
+        <File Id="TagDefinitions.xml" Name="TagDefinitions.xml" Source="$(var.SolutionDir)Dependencies\gsf\TagDefinitions.xml" />
+      </Component>
+    </ComponentGroup>
+    
+    <!-- DotNetZip Dependencies-->
+    <Component Id="Ionic.Zlib" Directory="INSTALLFOLDER">
+      <File Id="Ionic.Zlib.dll" Name="Ionic.Zlib.dll" Source="$(var.SolutionDir)Dependencies\DotNetZip\Ionic.Zlib.dll" />
+    </Component>
+
+    <!-- SQL Lite Dependencies-->
+    <ComponentGroup Id="SQLLITE" Directory="INSTALLFOLDER">
+    <Component Id="Sytem.data.SQLite">
+      <File Id="System.Data.SQLite.dll" Name="System.Data.SQLite.dll" Source="$(var.SolutionDir)Dependencies\gsf\System.Data.SQLite.dll" />
+    </Component>
+      <Component Id="ExpressionEvaluator">
+        <File Id="ExpressionEvaluator.dll" Name="ExpressionEvaluator.dll" Source="$(var.SolutionDir)Dependencies\gsf\ExpressionEvaluator.dll" />
+      </Component>
+    </ComponentGroup>
+    <!-- Newtonsoft Dependencies-->
+    <Component Id="Newtonsoft.Json" Directory="INSTALLFOLDER">
+      <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.SolutionDir)packages\Newtonsoft.Json.12.0.3-beta1\lib\net45\Newtonsoft.Json.dll" />
+    </Component>
+
+    <!-- DataBase Dependencies-->
+    <Component Id="SQLLiteDB" Directory="INSTALLFOLDER">
+      <File Id="DataBase.db" Name="DataBase.db" Source="$(var.SolutionDir)Applications\WaveFormParser\DataBase.db" />
+    </Component>
+
+    <!-- Setup Tool Dependencies-->
+    <Component Id="SetupTool" Directory="INSTALLFOLDER">
+      <File Id="SetupTool.exe" Name="$(var.SetupTool.TargetFileName)" Source="$(var.SetupTool.TargetPath)" />
+    </Component>
+
+    <!-- Setup Tool Dependencies-->
+    <ComponentGroup Id="AppConfig" Directory="INSTALLFOLDER">
+      <Component Id="SetupTool.config">
+        <File Id="SetupTool.exe.config" Name="$(var.SetupTool.TargetFileName).config" Source="$(var.SetupTool.TargetPath).config" />
+      </Component>
+      <Component Id="PQds.config">
+        <File Id="PQds.exe.config" Name="$(var.PQds.TargetFileName).config" Source="$(var.PQds.TargetPath).config" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- License and Documentition Dependencies-->
+    <ComponentGroup Id="Documentation">
+      <Component Id="License" Directory="DocFolder">
+        <File Id="License_PQDS.rtf" Name="License_PQDS.rtf" Source="$(var.SolutionDir)Documentation\License_PQDS.rtf" />
+      </Component>
+      <Component Id="SplashScreen" Directory="DocFolder">
+        <File Id="Splash_PQDS.rtf" Name="Splash_PQDS.rtf" Source="$(var.SolutionDir)Documentation\Splash_PQDS.rtf" />
+      </Component>
+      <Component Id="About" Directory="DocFolder">
+        <File Id="About_PQDS.rtf" Name="About_PQDS.rtf" Source="$(var.SolutionDir)Documentation\About_PQDS.rtf" />
+      </Component>
+      <Component Id="Manual" Directory="DocFolder">
+        <File Id="Manual.pdf" Name="Manual.pdf" Source="$(var.SolutionDir)Documentation\Manual.pdf" />
+      </Component>
+    </ComponentGroup>
+
+    
+    <!-- Start Menu -->
+    <ComponentGroup Id="ApplicationShortcut">
+    <Component Id="MenuShortcut" Guid="FCA787C7-8266-46E4-A9D9-10F1E783EDA0" Directory="StartMenuFolderName">
+      <Shortcut Id="ApplicationStartMenuShortcut"
+                Name="PQds Tool"
+                Description="PQds Software tool"
+                Target="[#PQds.exe]"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon ="icon.ico"/>
+      <Shortcut Id="ManualStartMenuShortcut"
+                Name="Software Manual"
+                Description="PQds Tool Manual"
+                Target="[#Manual.pdf]"
+                WorkingDirectory="DocFolder"/>
+      <RemoveFolder Id="CleanUpShortCut" Directory="StartMenuFolderName" On="uninstall"/>
+      <RegistryValue Root="HKCU" Key="Software\GPA\PQds" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+
+    <Component Id="DesktopShortcut" Guid="{A2211042-F515-4BE5-B323-4AA3F48BC111}" Directory="DesktopFolder">
+      <Shortcut Id="ApplicationDesktopShortcut"
+                Name="PQds Tool"
+                Description="PQds Software tool"
+                Target="[#PQds.exe]"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon ="icon.ico"/>
+      <RegistryValue Root="HKCU" Key="Software\GPA\PQds" Name="installed-Desktop" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- Custom Dialogs -->
+  <Fragment>
+    <UI>
+      <!-- CompanyInfo Dialog -->
+      <Dialog Id="CompanyInfoDialog" Width="370" Height="270" Title="[ProductName] Setup">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>{\WixUI_Font_Title}Company Information</Text>
+        </Control>
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>Enter information for the company using [ProductName].</Text>
+        </Control>
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="CompanyNameLabel" Type="Text" X="45" Y="73" Width="100" Height="15" TabSkip="no" Text="&amp;Company Name:" />
+        <Control Id="CompanyNameEdit" Type="Edit" X="45" Y="85" Width="220" Height="18" Property="COMPANYNAME" Text="{80}" />
+        <Control Id="CompanyEmailLabel" Type="Text" X="45" Y="113" Width="100" Height="15" TabSkip="no" Text="&amp;Company Email:" />
+        <Control Id="CompanyEmailEdit" Type="Edit" X="45" Y="125" Width="220" Height="18" Property="COMPANYEMAIL" Text="{80}" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="&amp;Back">
+          <Publish Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="&amp;Next">
+          <Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="Cancel">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>

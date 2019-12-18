@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{79FBD416-8CFF-425E-A010-15E61B9D3BD7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PQds</RootNamespace>
+    <AssemblyName>PQds</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Build\Output\Debug\Applications\PQds\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\Build\Output\Release\Applications\PQds\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\Build\Output\Debug\Applications\PQds\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\..\Build\Output\Release\Applications\PQds\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PQds.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpressionEvaluator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=90d9f15d622e2348, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ExpressionEvaluator.2.0.4.0\lib\net40\ExpressionEvaluator.dll</HintPath>
+    </Reference>
+    <Reference Include="GSF.Core, Version=2.3.207.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\gsf\GSF.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zlib, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GSF.PQDIF.2.3.207-beta\lib\net46\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\Dependencies\gsf\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PQdsSplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsSplashScreen.Designer.cs">
+      <DependentUpon>PQdsSplashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsAbout.Designer.cs">
+      <DependentUpon>PQdsAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsAddCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsAddCustom.Designer.cs">
+      <DependentUpon>PQdsAddCustom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsChannel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsChannel.Designer.cs">
+      <DependentUpon>PQdsChannel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsDevice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsDevice.Designer.cs">
+      <DependentUpon>PQdsDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsEvent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsEvent.Designer.cs">
+      <DependentUpon>PQdsEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsMain.Designer.cs">
+      <DependentUpon>PQdsMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsAsset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsAsset.Designer.cs">
+      <DependentUpon>PQdsAsset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsDataSensitivity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsDataSensitivity.Designer.cs">
+      <DependentUpon>PQdsDataSensitivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsPQDSexp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsPQDSexp.Designer.cs">
+      <DependentUpon>PQdsPQDSexp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PQdsProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PQdsProgress.Designer.cs">
+      <DependentUpon>PQdsProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PQdsSplashScreen.resx">
+      <DependentUpon>PQdsSplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsAbout.resx">
+      <DependentUpon>PQdsAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsAddCustom.resx">
+      <DependentUpon>PQdsAddCustom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsChannel.resx">
+      <DependentUpon>PQdsChannel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsDevice.resx">
+      <DependentUpon>PQdsDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsEvent.resx">
+      <DependentUpon>PQdsEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsMain.resx">
+      <DependentUpon>PQdsMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsAsset.resx">
+      <DependentUpon>PQdsAsset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsDataSensitivity.resx">
+      <DependentUpon>PQdsDataSensitivity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsPQDSexp.resx">
+      <DependentUpon>PQdsPQDSexp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PQdsProgress.resx">
+      <DependentUpon>PQdsProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.manifest" />
+    <None Include="DataBase.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="Documentation\About_PQDS.rtf" />
+    <EmbeddedResource Include="Documentation\Splash_PQDS.rtf" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\FileParser\FileParser\FileParser.csproj">
+      <Project>{1792c2fe-264a-470a-af39-f418f9876d94}</Project>
+      <Name>FileParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Model\PQDS.Model\PQds.Model.csproj">
+      <Project>{3bbbe380-9797-4d60-bfeb-ecc77c716fcc}</Project>
+      <Name>PQds.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PQDS_Logo_120.png" />
+    <Content Include="PQds.ico" />
+    <Content Include="PQio_Logo.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <PropertyGroup>
+    <PreBuildEvent>XCOPY "$(SolutionDir)documentation\*.*" "$(SolutionDir)Applications\WaveFormParser\Documentation\" /E/Y/D</PreBuildEvent>
+  </PropertyGroup>
+</Project>
